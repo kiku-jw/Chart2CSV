@@ -38,7 +38,8 @@ def extract_chart(
     y_scale: Scale = Scale.LINEAR,
     chart_type: Optional[ChartType] = None,
     calibration_points: Optional[Dict[str, Any]] = None,
-    generate_overlay_image: bool = True
+    generate_overlay_image: bool = True,
+    use_mistral: bool = False
 ) -> ChartResult:
     """
     Extract data from a chart image.
@@ -132,7 +133,7 @@ def extract_chart(
     if calibration_points:
         ocr_conf = 1.0
     else:
-        ticks, ocr_conf = extract_tick_labels(processed, axes)
+        ticks, ocr_conf = extract_tick_labels(processed, axes, use_mistral=use_mistral)
         if ocr_conf < 0.4:
             warnings_list.append((
                 WarningCode.OCR_FAILED,

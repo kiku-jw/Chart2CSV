@@ -129,6 +129,10 @@ def detect_ticks(
     x_edges = cv2.Sobel(x_strip, cv2.CV_8U, 1, 0, ksize=3)
     x_proj = np.sum(x_edges, axis=0)
     
+    # Ensure 1D array
+    if x_proj.ndim > 1:
+        x_proj = x_proj.flatten()
+
     # Find peaks in projection
     from scipy.signal import find_peaks
     x_peaks, _ = find_peaks(x_proj, distance=10, height=np.mean(x_proj))
@@ -142,6 +146,10 @@ def detect_ticks(
     y_edges = cv2.Sobel(y_strip, cv2.CV_8U, 0, 1, ksize=3)
     y_proj = np.sum(y_edges, axis=1)
     
+    # Ensure 1D array
+    if y_proj.ndim > 1:
+        y_proj = y_proj.flatten()
+
     y_peaks, _ = find_peaks(y_proj, distance=10, height=np.mean(y_proj))
     ticks["y"] = [int(p) for p in y_peaks]
     
