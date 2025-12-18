@@ -4,22 +4,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chart2CSV — AI-Powered Chart Data Extraction</title>
+  <title>Chart2CSV — Extract Data from Chart Images with AI</title>
+  <meta name="description"
+    content="Convert chart images to CSV data instantly. No clicking required. Free, open-source chart digitizer powered by AI.">
+  <meta name="keywords"
+    content="chart digitizer, extract data from graph, plot to csv, chart to data, webplotdigitizer alternative">
+  <meta property="og:title" content="Chart2CSV — AI Chart Data Extraction">
+  <meta property="og:description" content="Extract data from chart images to CSV. Zero-click. Free. Open-source.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kiku-jw.github.io/Chart2CSV/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <style>
     :root {
-      --bg: #050505;
+      --bg: #000;
+      --bg-subtle: #050505;
       --surface: #0a0a0a;
-      --surface-2: #111111;
+      --surface-2: #111;
       --border: #1a1a1a;
-      --text: #f0f0f0;
+      --border-light: #222;
+      --text: #fff;
+      --text-secondary: #a0a0a0;
       --text-muted: #666;
       --accent: #00ff88;
-      --accent-dim: #00cc6a;
-      --accent-glow: rgba(0, 255, 136, 0.15);
-      --gradient-1: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
-      --gradient-2: linear-gradient(135deg, #ff00aa 0%, #ff6600 100%);
+      --accent-secondary: #00d4ff;
+      --accent-glow: rgba(0, 255, 136, 0.2);
+      --gradient: linear-gradient(135deg, #00ff88 0%, #00d4ff 50%, #00ff88 100%);
     }
 
     * {
@@ -28,104 +39,136 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
-    /* Animated background */
-    .bg-gradient {
+    /* Animated gradient background */
+    .gradient-bg {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       pointer-events: none;
       z-index: 0;
-    }
-
-    .bg-gradient::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
       background:
-        radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(255, 0, 170, 0.03) 0%, transparent 50%);
-      animation: gradientMove 20s ease-in-out infinite;
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0, 255, 136, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 50% at 20% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
     }
 
-    @keyframes gradientMove {
-
-      0%,
-      100% {
-        transform: translate(0, 0) rotate(0deg);
-      }
-
-      25% {
-        transform: translate(-5%, -5%) rotate(5deg);
-      }
-
-      50% {
-        transform: translate(5%, 5%) rotate(-5deg);
-      }
-
-      75% {
-        transform: translate(-3%, 3%) rotate(3deg);
-      }
-    }
-
-    /* Grid overlay */
-    .grid-overlay {
+    /* Noise overlay */
+    .noise {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image:
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 50px 50px;
+      inset: 0;
       pointer-events: none;
       z-index: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     }
 
     .container {
       position: relative;
       z-index: 1;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 0 24px;
     }
 
-    /* Hero */
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      padding: 10px 20px;
+      background: var(--accent);
+      color: #000;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--accent-glow);
+    }
+
+    /* Hero Section */
     .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      padding: 4rem 0 3rem;
+      padding: 120px 24px 80px;
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: var(--surface-2);
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 100px;
       font-size: 0.85rem;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-      animation: fadeInUp 0.6s ease-out;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      animation: fadeIn 0.6s ease-out;
     }
 
-    .hero-badge::before {
-      content: '';
+    .hero-badge .dot {
       width: 8px;
       height: 8px;
       background: var(--accent);
@@ -138,40 +181,14 @@
       0%,
       100% {
         opacity: 1;
-        transform: scale(1);
       }
 
       50% {
-        opacity: 0.5;
-        transform: scale(1.2);
+        opacity: 0.4;
       }
     }
 
-    h1 {
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-      animation: fadeInUp 0.6s ease-out 0.1s both;
-    }
-
-    h1 .gradient-text {
-      background: var(--gradient-1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-subtitle {
-      font-size: 1.25rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      line-height: 1.6;
-      animation: fadeInUp 0.6s ease-out 0.2s both;
-    }
-
-    @keyframes fadeInUp {
+    @keyframes fadeIn {
       from {
         opacity: 0;
         transform: translateY(20px);
@@ -183,312 +200,380 @@
       }
     }
 
-    /* Killer feature callout */
-    .killer-feature {
+    .hero h1 {
+      font-size: clamp(3rem, 10vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 24px;
+      animation: fadeIn 0.6s ease-out 0.1s both;
+    }
+
+    .hero h1 .gradient {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin-bottom: 48px;
+      animation: fadeIn 0.6s ease-out 0.2s both;
+    }
+
+    .hero-buttons {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
+      gap: 16px;
       flex-wrap: wrap;
-      margin-bottom: 3rem;
-      animation: fadeInUp 0.6s ease-out 0.3s both;
+      justify-content: center;
+      animation: fadeIn 0.6s ease-out 0.3s both;
     }
 
-    .killer-item {
-      display: flex;
+    .btn {
+      display: inline-flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1.25rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      gap: 8px;
+      padding: 16px 32px;
       border-radius: 12px;
-      font-size: 0.95rem;
-      transition: all 0.3s ease;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: none;
     }
 
-    .killer-item:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 30px var(--accent-glow);
-      transform: translateY(-2px);
+    .btn-primary {
+      background: var(--gradient);
+      color: #000;
     }
 
-    .killer-item .icon {
-      font-size: 1.5rem;
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px var(--accent-glow);
     }
 
-    .killer-item .text strong {
-      color: var(--accent);
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
 
-    /* Comparison section */
-    .comparison {
+    .btn-secondary:hover {
+      background: var(--surface-2);
+      border-color: var(--border-light);
+    }
+
+    /* Features Section */
+    .features {
+      padding: 120px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      padding: 32px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 2rem;
-      margin-bottom: 3rem;
-      animation: fadeInUp 0.6s ease-out 0.4s both;
+      transition: all 0.3s;
     }
 
-    .comparison h2 {
-      text-align: center;
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .comparison-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-
-    .comparison-item {
-      padding: 1.25rem;
-      background: var(--surface-2);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-
-    .comparison-item.highlight {
+    .feature-card:hover {
       border-color: var(--accent);
-      background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, transparent 100%);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 255, 136, 0.1);
     }
 
-    .comparison-item h3 {
-      font-size: 1rem;
-      margin-bottom: 0.75rem;
+    .feature-icon {
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.1));
+      border-radius: 12px;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
     }
 
-    .comparison-item.highlight h3 {
-      color: var(--accent);
+    .feature-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
     }
 
-    .comparison-item ul {
-      list-style: none;
-      font-size: 0.85rem;
-      color: var(--text-muted);
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
     }
 
-    .comparison-item ul li {
-      padding: 0.3rem 0;
+    /* How It Works */
+    .how-it-works {
+      padding: 120px 0;
+      background: var(--bg-subtle);
+    }
+
+    .steps {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .step {
+      flex: 1;
+      min-width: 200px;
+      max-width: 280px;
+      text-align: center;
+      padding: 32px;
+    }
+
+    .step-number {
+      width: 56px;
+      height: 56px;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-
-    .comparison-item ul li::before {
-      content: '✓';
-      color: var(--accent);
-    }
-
-    .comparison-item:not(.highlight) ul li::before {
-      content: '•';
-      color: var(--text-muted);
-    }
-
-    /* Main app section */
-    .app-section {
-      animation: fadeInUp 0.6s ease-out 0.5s both;
-    }
-
-    .api-key-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      justify-content: center;
+      background: var(--gradient);
+      color: #000;
+      font-size: 1.5rem;
+      font-weight: 800;
       border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
+      margin: 0 auto 24px;
     }
 
-    .api-key-section label {
-      display: block;
-      margin-bottom: 0.5rem;
+    .step h3 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Comparison */
+    .comparison {
+      padding: 120px 0;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 20px 24px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .comparison-table th {
+      background: var(--surface-2);
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .comparison-table td:first-child {
       font-weight: 500;
     }
 
-    .api-key-section input {
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-table .highlight {
+      background: linear-gradient(90deg, rgba(0, 255, 136, 0.1), transparent);
+    }
+
+    .comparison-table .highlight td:first-child {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .check {
+      color: var(--accent);
+    }
+
+    .cross {
+      color: #666;
+    }
+
+    /* Demo Tool Section */
+    .demo-section {
+      padding: 120px 0;
+      background: var(--bg-subtle);
+    }
+
+    .demo-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .api-key-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .api-key-box label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .api-key-box input {
       width: 100%;
-      padding: 0.875rem 1rem;
+      padding: 14px 18px;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
       color: var(--text);
       font-size: 1rem;
       font-family: 'SF Mono', Monaco, monospace;
-      transition: all 0.2s ease;
     }
 
-    .api-key-section input:focus {
+    .api-key-box input:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    .api-key-section small {
+    .api-key-box small {
       display: block;
-      margin-top: 0.5rem;
+      margin-top: 8px;
       color: var(--text-muted);
-      font-size: 0.85rem;
     }
 
-    .api-key-section small a {
+    .api-key-box small a {
       color: var(--accent);
       text-decoration: none;
     }
 
-    /* Dropzone */
     .dropzone {
-      position: relative;
       background: var(--surface);
       border: 2px dashed var(--border);
       border-radius: 20px;
-      padding: 4rem 2rem;
+      padding: 60px 40px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-bottom: 1.5rem;
-      overflow: hidden;
-    }
-
-    .dropzone::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--gradient-1);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .dropzone:hover::before,
-    .dropzone.dragover::before {
-      opacity: 0.05;
+      transition: all 0.3s;
+      margin-bottom: 24px;
     }
 
     .dropzone:hover,
     .dropzone.dragover {
       border-color: var(--accent);
-      transform: scale(1.01);
-    }
-
-    .dropzone-content {
-      position: relative;
-      z-index: 1;
+      background: rgba(0, 255, 136, 0.03);
     }
 
     .dropzone-icon {
       font-size: 4rem;
-      margin-bottom: 1rem;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
+      margin-bottom: 16px;
     }
 
     .dropzone h3 {
       font-size: 1.25rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 8px;
     }
 
     .dropzone p {
       color: var(--text-muted);
     }
 
-    /* Preview */
-    .preview-section {
+    .preview-box {
       display: none;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
+      padding: 24px;
+      margin-bottom: 24px;
     }
 
-    .preview-section.active {
+    .preview-box.active {
       display: block;
-      animation: fadeInUp 0.4s ease-out;
     }
 
-    .preview-section h3 {
-      margin-bottom: 1rem;
+    .preview-box h4 {
+      margin-bottom: 16px;
       font-weight: 600;
     }
 
-    .preview-image {
+    .preview-box img {
       max-width: 100%;
       max-height: 400px;
       border-radius: 12px;
       border: 1px solid var(--border);
     }
 
-    /* Extract button */
     .extract-btn {
-      position: relative;
       width: 100%;
-      padding: 1.25rem;
-      background: var(--gradient-1);
+      padding: 18px;
+      background: var(--gradient);
       border: none;
       border-radius: 14px;
       color: #000;
       font-size: 1.1rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-bottom: 1.5rem;
-      overflow: hidden;
+      transition: all 0.3s;
     }
 
-    .extract-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transition: left 0.5s ease;
-    }
-
-    .extract-btn:hover::before {
-      left: 100%;
-    }
-
-    .extract-btn:hover {
+    .extract-btn:hover:not(:disabled) {
       transform: translateY(-3px);
-      box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+      box-shadow: 0 20px 40px var(--accent-glow);
     }
 
     .extract-btn:disabled {
       opacity: 0.4;
       cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
     }
 
-    /* Status */
-    .status {
+    .status-box {
       text-align: center;
-      padding: 1.5rem;
+      padding: 24px;
       color: var(--text-muted);
       display: none;
     }
 
-    .status.active {
+    .status-box.active {
       display: block;
-      animation: fadeInUp 0.3s ease-out;
     }
 
-    .status.error {
+    .status-box.error {
       color: #ff4757;
     }
 
@@ -500,7 +585,7 @@
       border-top-color: var(--accent);
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin-right: 0.75rem;
+      margin-right: 12px;
       vertical-align: middle;
     }
 
@@ -510,237 +595,351 @@
       }
     }
 
-    /* Result */
-    .result-section {
+    .result-box {
       display: none;
       background: var(--surface);
       border: 1px solid var(--accent);
       border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 0 40px var(--accent-glow);
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 0 0 60px var(--accent-glow);
     }
 
-    .result-section.active {
+    .result-box.active {
       display: block;
-      animation: resultPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes resultPop {
-      0% {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    .result-section h3 {
-      margin-bottom: 1rem;
-      font-weight: 600;
+    .result-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 16px;
     }
 
-    .result-meta {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .result-meta span {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+    .result-header h4 {
+      font-weight: 600;
+      color: var(--accent);
     }
 
     .download-btn {
-      padding: 0.6rem 1.25rem;
+      padding: 10px 20px;
       background: var(--accent);
       border: none;
       border-radius: 8px;
       color: #000;
       font-weight: 600;
       cursor: pointer;
+    }
+
+    .result-meta {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 16px;
       font-size: 0.9rem;
-      transition: all 0.2s ease;
+      color: var(--text-muted);
     }
 
-    .download-btn:hover {
-      transform: scale(1.05);
-    }
-
-    .csv-preview {
+    .csv-output {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 1rem;
+      padding: 16px;
       font-family: 'SF Mono', Monaco, monospace;
       font-size: 0.85rem;
       max-height: 300px;
       overflow: auto;
       white-space: pre;
-      line-height: 1.5;
     }
 
     /* Footer */
     footer {
-      margin-top: 4rem;
-      padding: 2rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
+      padding: 60px 0 40px;
       border-top: 1px solid var(--border);
+      text-align: center;
     }
 
-    footer a {
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--text);
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    footer p a {
       color: var(--accent);
       text-decoration: none;
     }
 
-    footer .links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 1rem;
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .steps {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .comparison-table {
+        font-size: 0.85rem;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        padding: 12px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <div class="bg-gradient"></div>
-  <div class="grid-overlay"></div>
+  <div class="gradient-bg"></div>
+  <div class="noise"></div>
 
-  <div class="container">
-    <section class="hero">
-      <div class="hero-badge">
-        <span>AI-Powered</span>
+  <nav>
+    <div class="container">
+      <span class="logo">Chart2CSV</span>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How it Works</a></li>
+        <li><a href="#comparison">Comparison</a></li>
+        <li><a href="#demo">Try It</a></li>
+      </ul>
+      <a href="https://github.com/kiku-jw/Chart2CSV" class="nav-cta">GitHub</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      <span>AI-Powered Chart Extraction</span>
+    </div>
+    <h1>
+      <span class="gradient">Zero-Click</span><br>
+      Chart to CSV
+    </h1>
+    <p class="hero-subtitle">
+      Extract data from any chart image instantly. No manual clicking.
+      AI reads the axes, values, and data points for you.
+    </p>
+    <div class="hero-buttons">
+      <a href="#demo" class="btn btn-primary">Try It Now →</a>
+      <a href="https://github.com/kiku-jw/Chart2CSV" class="btn btn-secondary">View on GitHub</a>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Why Chart2CSV?</h2>
+        <p>The fastest way to get data from chart images</p>
       </div>
-      <h1>
-        <span class="gradient-text">Zero-Click</span><br>
-        Chart Extraction
-      </h1>
-      <p class="hero-subtitle">
-        Unlike traditional digitizers that require manual point clicking, Chart2CSV uses AI vision to instantly extract
-        all data points. Drop your chart, get CSV.
-      </p>
-
-      <div class="killer-feature">
-        <div class="killer-item">
-          <span class="icon">⚡</span>
-          <span class="text"><strong>No clicking</strong> required</span>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Zero-Click Extraction</h3>
+          <p>AI understands your chart automatically. No need to manually click each data point like traditional tools.
+          </p>
         </div>
-        <div class="killer-item">
-          <span class="icon">🧠</span>
-          <span class="text"><strong>AI understands</strong> axis labels</span>
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h3>AI-Powered OCR</h3>
+          <p>Uses Mistral Vision to accurately read axis labels, even from low-quality images or unusual fonts.</p>
         </div>
-        <div class="killer-item">
-          <span class="icon">🔒</span>
-          <span class="text"><strong>Privacy-first</strong> — runs locally</span>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Privacy First</h3>
+          <p>Run offline with Tesseract OCR. Your data never leaves your computer unless you choose cloud mode.</p>
         </div>
-      </div>
-    </section>
-
-    <section class="comparison">
-      <h2>Why Chart2CSV?</h2>
-      <div class="comparison-grid">
-        <div class="comparison-item">
-          <h3>📊 WebPlotDigitizer</h3>
-          <ul>
-            <li>Manual point clicking</li>
-            <li>Slow for many points</li>
-            <li>Can include gridlines</li>
-            <li>Desktop/Web app</li>
-          </ul>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Multiple Chart Types</h3>
+          <p>Works with line charts, scatter plots, and bar charts. Handles both linear and logarithmic scales.</p>
         </div>
-        <div class="comparison-item">
-          <h3>📈 PlotDigitizer Pro</h3>
-          <ul>
-            <li>Paid subscription</li>
-            <li>Semi-automatic</li>
-            <li>One curve at a time</li>
-            <li>No API access</li>
-          </ul>
+        <div class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <h3>CLI & API</h3>
+          <p>Powerful command-line interface for automation. Process folders of charts with a single command.</p>
         </div>
-        <div class="comparison-item highlight">
-          <h3>⚡ Chart2CSV</h3>
-          <ul>
-            <li>Zero-click AI extraction</li>
-            <li>Instant results</li>
-            <li>Open source & free</li>
-            <li>CLI + API + Web</li>
-            <li>Mistral Vision powered</li>
-          </ul>
+        <div class="feature-card">
+          <div class="feature-icon">✓</div>
+          <h3>Visual Verification</h3>
+          <p>Generate overlay images showing detected points. Verify extraction quality at a glance.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="app-section">
-      <div class="api-key-section">
-        <label for="apiKey">🔑 Mistral API Key</label>
-        <input type="password" id="apiKey" placeholder="Enter your Mistral API key...">
-        <small>Get your free key at <a href="https://console.mistral.ai/" target="_blank">console.mistral.ai</a>. Your
-          key never leaves your browser.</small>
+  <section id="how-it-works" class="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>How It Works</h2>
+        <p>Three simple steps to your data</p>
       </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Upload Chart</h3>
+          <p>Drop your chart image (PNG, JPG) or use the CLI</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>AI Analyzes</h3>
+          <p>Detects axes, reads labels, extracts data points</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Download CSV</h3>
+          <p>Get your data as a clean CSV file</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      <div class="dropzone" id="dropzone">
-        <div class="dropzone-content">
+  <section id="comparison" class="comparison">
+    <div class="container">
+      <div class="section-header">
+        <h2>Comparison</h2>
+        <p>How we stack up against alternatives</p>
+      </div>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>WebPlotDigitizer</th>
+            <th>PlotDigitizer Pro</th>
+            <th>Chart2CSV</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Extraction Method</td>
+            <td>Manual point clicking</td>
+            <td>Semi-automatic</td>
+            <td><strong>AI automatic</strong></td>
+          </tr>
+          <tr>
+            <td>Speed</td>
+            <td>5-30 min / chart</td>
+            <td>2-10 min / chart</td>
+            <td><strong>Seconds</strong></td>
+          </tr>
+          <tr>
+            <td>Price</td>
+            <td>Free</td>
+            <td>$$ / month</td>
+            <td><strong>Free & Open Source</strong></td>
+          </tr>
+          <tr>
+            <td>Offline Mode</td>
+            <td class="check">✓</td>
+            <td class="cross">✗</td>
+            <td class="check"><strong>✓</strong></td>
+          </tr>
+          <tr>
+            <td>CLI / API</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="check"><strong>✓</strong></td>
+          </tr>
+          <tr>
+            <td>AI OCR</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="check"><strong>✓ (Mistral)</strong></td>
+          </tr>
+          <tr class="highlight">
+            <td>Best For</td>
+            <td>Occasional use</td>
+            <td>Business users</td>
+            <td><strong>Developers & Researchers</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="demo" class="demo-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Try It Now</h2>
+        <p>Extract data from your chart in seconds</p>
+      </div>
+      <div class="demo-container">
+        <div class="api-key-box">
+          <label for="apiKey">🔑 Mistral API Key</label>
+          <input type="password" id="apiKey" placeholder="Enter your API key...">
+          <small>Get a free key at <a href="https://console.mistral.ai/" target="_blank">console.mistral.ai</a></small>
+        </div>
+
+        <div class="dropzone" id="dropzone">
           <div class="dropzone-icon">📊</div>
-          <h3>Drop your chart image here</h3>
-          <p>or click to select • PNG, JPG, WebP</p>
+          <h3>Drop your chart here</h3>
+          <p>or click to browse • PNG, JPG, WebP</p>
+          <input type="file" id="fileInput" accept="image/*" hidden>
         </div>
-        <input type="file" id="fileInput" accept="image/*" hidden>
-      </div>
 
-      <div class="preview-section" id="previewSection">
-        <h3>📷 Preview</h3>
-        <img class="preview-image" id="previewImage" alt="Chart preview">
-      </div>
-
-      <button class="extract-btn" id="extractBtn" disabled>
-        ⚡ Extract Data with AI
-      </button>
-
-      <div class="status" id="status"></div>
-
-      <div class="result-section" id="resultSection">
-        <h3>
-          ✅ Extracted Data
-          <button class="download-btn" id="downloadBtn">Download CSV</button>
-        </h3>
-        <div class="result-meta">
-          <span id="pointCount">📍 -- points</span>
-          <span id="extractTime">⏱️ -- ms</span>
+        <div class="preview-box" id="previewBox">
+          <h4>Preview</h4>
+          <img id="previewImage" alt="Chart preview">
         </div>
-        <div class="csv-preview" id="csvPreview"></div>
+
+        <button class="extract-btn" id="extractBtn" disabled>⚡ Extract Data</button>
+
+        <div class="status-box" id="statusBox"></div>
+
+        <div class="result-box" id="resultBox">
+          <div class="result-header">
+            <h4>✅ Extracted Data</h4>
+            <button class="download-btn" id="downloadBtn">Download CSV</button>
+          </div>
+          <div class="result-meta">
+            <span id="pointCount">📍 -- points</span>
+            <span id="extractTime">⏱️ -- ms</span>
+          </div>
+          <div class="csv-output" id="csvOutput"></div>
+        </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <footer>
-    <p>Built with ❤️ by <a href="https://github.com/kiku-jw" target="_blank">kiku-jw</a></p>
-    <div class="links">
-      <a href="https://github.com/kiku-jw/Chart2CSV" target="_blank">GitHub</a>
-      <a href="https://github.com/kiku-jw/Chart2CSV#readme" target="_blank">Documentation</a>
-      <a href="https://github.com/kiku-jw/Chart2CSV/issues" target="_blank">Report Issue</a>
+    <div class="container">
+      <div class="footer-links">
+        <a href="https://github.com/kiku-jw/Chart2CSV">GitHub</a>
+        <a href="https://github.com/kiku-jw/Chart2CSV/wiki">Documentation</a>
+        <a href="https://github.com/kiku-jw/Chart2CSV/issues">Report Issue</a>
+      </div>
+      <p>Built by <a href="https://github.com/kiku-jw">kiku-jw</a> • MIT License</p>
     </div>
   </footer>
 
   <script>
     const dropzone = document.getElementById('dropzone');
     const fileInput = document.getElementById('fileInput');
-    const previewSection = document.getElementById('previewSection');
+    const previewBox = document.getElementById('previewBox');
     const previewImage = document.getElementById('previewImage');
     const extractBtn = document.getElementById('extractBtn');
     const apiKeyInput = document.getElementById('apiKey');
-    const status = document.getElementById('status');
-    const resultSection = document.getElementById('resultSection');
-    const csvPreview = document.getElementById('csvPreview');
+    const statusBox = document.getElementById('statusBox');
+    const resultBox = document.getElementById('resultBox');
+    const csvOutput = document.getElementById('csvOutput');
     const downloadBtn = document.getElementById('downloadBtn');
     const pointCount = document.getElementById('pointCount');
     const extractTime = document.getElementById('extractTime');
@@ -748,22 +947,18 @@
     let currentFile = null;
     let currentCSV = '';
 
-    // Load saved API key
     const savedKey = localStorage.getItem('mistral_api_key');
     if (savedKey) apiKeyInput.value = savedKey;
 
     apiKeyInput.addEventListener('input', () => {
       localStorage.setItem('mistral_api_key', apiKeyInput.value);
-      updateExtractButton();
+      updateBtn();
     });
 
     dropzone.addEventListener('click', () => fileInput.click());
-    dropzone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      dropzone.classList.add('dragover');
-    });
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
     dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-    dropzone.addEventListener('drop', (e) => {
+    dropzone.addEventListener('drop', e => {
       e.preventDefault();
       dropzone.classList.remove('dragover');
       if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
@@ -773,29 +968,21 @@
     });
 
     function handleFile(file) {
-      if (!file.type.startsWith('image/')) {
-        showStatus('Please select an image file', true);
-        return;
-      }
+      if (!file.type.startsWith('image/')) return;
       currentFile = file;
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         previewImage.src = e.target.result;
-        previewSection.classList.add('active');
-        updateExtractButton();
+        previewBox.classList.add('active');
+        updateBtn();
       };
       reader.readAsDataURL(file);
-      resultSection.classList.remove('active');
-      status.classList.remove('active');
+      resultBox.classList.remove('active');
+      statusBox.classList.remove('active');
     }
 
-    function updateExtractButton() {
+    function updateBtn() {
       extractBtn.disabled = !(currentFile && apiKeyInput.value.trim());
-    }
-
-    function showStatus(msg, isError = false) {
-      status.innerHTML = msg;
-      status.className = 'status active' + (isError ? ' error' : '');
     }
 
     extractBtn.addEventListener('click', async () => {
@@ -803,24 +990,48 @@
 
       const startTime = Date.now();
       extractBtn.disabled = true;
-      showStatus('<span class="spinner"></span> AI is analyzing your chart...');
-      resultSection.classList.remove('active');
+      statusBox.innerHTML = '<span class="spinner"></span> AI is analyzing...';
+      statusBox.className = 'status-box active';
+      resultBox.classList.remove('active');
 
       try {
-        const base64 = await fileToBase64(currentFile);
-        const csv = await extractWithMistral(apiKeyInput.value.trim(), base64);
+        const base64 = await new Promise((res, rej) => {
+          const r = new FileReader();
+          r.onload = () => res(r.result);
+          r.onerror = rej;
+          r.readAsDataURL(currentFile);
+        });
 
-        const elapsed = Date.now() - startTime;
-        const lines = csv.trim().split('\n').length - 1;
+        const resp = await fetch('https://api.mistral.ai/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKeyInput.value.trim()}` },
+          body: JSON.stringify({
+            model: 'pixtral-12b-2409',
+            messages: [{
+              role: 'user',
+              content: [
+                { type: 'text', text: `Extract all data points from this chart. Output ONLY CSV with headers (x,y for line/scatter, label,value for bar). No explanations.` },
+                { type: 'image_url', image_url: base64 }
+              ]
+            }],
+            max_tokens: 4096
+          })
+        });
+
+        if (!resp.ok) throw new Error((await resp.json()).message || 'API error');
+
+        const data = await resp.json();
+        let csv = data.choices[0].message.content.trim().replace(/```csv\n?/g, '').replace(/```\n?/g, '').trim();
 
         currentCSV = csv;
-        csvPreview.textContent = csv;
-        pointCount.textContent = `📍 ${lines} points`;
-        extractTime.textContent = `⏱️ ${elapsed}ms`;
-        resultSection.classList.add('active');
-        status.classList.remove('active');
+        csvOutput.textContent = csv;
+        pointCount.textContent = `📍 ${csv.trim().split('\n').length - 1} points`;
+        extractTime.textContent = `⏱️ ${Date.now() - startTime}ms`;
+        resultBox.classList.add('active');
+        statusBox.classList.remove('active');
       } catch (err) {
-        showStatus('❌ ' + err.message, true);
+        statusBox.innerHTML = '❌ ' + err.message;
+        statusBox.className = 'status-box active error';
       } finally {
         extractBtn.disabled = false;
       }
@@ -828,77 +1039,11 @@
 
     downloadBtn.addEventListener('click', () => {
       const blob = new Blob([currentCSV], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = URL.createObjectURL(blob);
       a.download = 'chart_data.csv';
       a.click();
-      URL.revokeObjectURL(url);
     });
-
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function extractWithMistral(apiKey, base64Image) {
-      const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'pixtral-12b-2409',
-          messages: [
-            {
-              role: 'user',
-              content: [
-                {
-                  type: 'text',
-                  text: `You are a chart data extraction expert. Analyze this chart image and extract all data points.
-
-Output ONLY a CSV with headers. For scatter/line charts use "x,y" columns. For bar charts use "label,value" columns.
-
-Rules:
-- Extract ALL visible data points
-- Use the actual axis values, not pixel coordinates
-- If axis labels are unclear, estimate based on grid lines
-- Output raw CSV only, no markdown code blocks, no explanations
-
-Example output for a line chart:
-x,y
-0,10
-1,15
-2,12
-3,18`
-                },
-                {
-                  type: 'image_url',
-                  image_url: base64Image
-                }
-              ]
-            }
-          ],
-          max_tokens: 4096
-        })
-      });
-
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.message || 'API request failed');
-      }
-
-      const data = await response.json();
-      let csv = data.choices[0].message.content.trim();
-      csv = csv.replace(/```csv\n?/g, '').replace(/```\n?/g, '').trim();
-
-      return csv;
-    }
   </script>
 </body>
 
