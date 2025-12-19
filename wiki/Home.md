@@ -1,37 +1,52 @@
-# Chart2CSV Wiki
+# Chart2CSV
 
-Welcome to the Chart2CSV documentation.
+> **Extract data from chart images using AI. 90%+ accuracy with Mistral Pixtral.**
 
-## What is Chart2CSV?
-
-Chart2CSV is a tool that extracts data from chart images and converts it to CSV format. You upload a picture of a chart (like a line graph or bar chart from a PDF or screenshot), and Chart2CSV gives you the actual numbers.
+---
 
 ## Quick Links
 
-- [Home](Home) — Overview
-- [Installation](Installation) — How to install
-- [Quick Start](Quick-Start) — Get started in 2 minutes
-- [CLI Reference](CLI-Reference) — All command line options
-- [How It Works](How-It-Works) — Technical explanation
-- [FAQ](FAQ) — Common questions
-- [Troubleshooting](Troubleshooting) — Fixing problems
+- 🚀 [Quick Start](Quick-Start)
+- 📖 [API Reference](API-Reference)
+- 💻 [CLI Reference](CLI-Reference)
+- ⚙️ [Installation](Installation)
+- 🔧 [Troubleshooting](Troubleshooting)
+- ❓ [FAQ](FAQ)
 
-## Why Use Chart2CSV?
+---
 
-**Problem:** You have a chart image (from a research paper, report, or website) and need the raw numbers.
+## Live Demo
 
-**Old way:** Manually click each point in WebPlotDigitizer. Takes 5-30 minutes per chart.
+Try it now: **[chart2csv.kikuai.dev](https://kiku-jw.github.io/Chart2CSV/)**
 
-**Chart2CSV way:** Drop the image, get CSV instantly. AI reads the chart for you.
+---
+
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| 🧠 **Mistral Pixtral** | Powered by Mistral AI vision model |
+| ⚡ **Zero-Click** | AI reads charts automatically |
+| 📊 **Multi-Chart** | Line, scatter, bar charts |
+| 🔒 **Privacy** | Offline mode with Tesseract |
+| 🌐 **REST API** | Simple HTTP endpoint |
+
+---
 
 ## Supported Charts
 
-- ✅ Line charts
-- ✅ Scatter plots 
-- ✅ Bar charts
-- ✅ Linear and logarithmic scales
+✅ Line charts  
+✅ Scatter plots  
+✅ Bar charts  
 
-## Getting Help
+❌ Pie charts  
+❌ Heatmaps  
+❌ 3D charts  
 
-- [GitHub Issues](https://github.com/kiku-jw/Chart2CSV/issues) — Report bugs
-- [FAQ](FAQ) — Common questions answered
+---
+
+## Technology
+
+- **Mistral Pixtral Large** — Vision LLM for chart understanding
+- **FastAPI** — High-performance REST API
+- **OpenCV** — Image preprocessing (fallback mode)
