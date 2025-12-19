@@ -1,143 +1,95 @@
 <div align="center">
-  
+
 # Chart2CSV
 
 ### AI-Powered Chart Data Extraction
 
-**Extract data from chart images to CSV using Mistral Pixtral Vision. No clicking required.**
+**Extract data from chart images using Mistral Pixtral Vision. 90%+ accuracy.**
 
-[Live Demo](https://kiku-jw.github.io/Chart2CSV/) · [Documentation](https://github.com/kiku-jw/Chart2CSV/wiki) · [Report Bug](https://github.com/kiku-jw/Chart2CSV/issues)
+[Live Demo](https://kiku-jw.github.io/Chart2CSV/) · [API Docs](https://chart2csv.kikuai.dev/docs) · [Wiki](https://github.com/kiku-jw/Chart2CSV/wiki)
 
-[![Demo](https://img.shields.io/badge/demo-live-00ff88?style=for-the-badge)](https://kiku-jw.github.io/Chart2CSV/)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-3776ab?style=for-the-badge)](https://python.org)
 
----
-
 </div>
 
-## ⚡ The Problem
-
-You have a chart image from a research paper, report, or website. You need the actual numbers.
-
-**Traditional tools** make you click each data point manually. That takes 5-30 minutes per chart.
-
-**Chart2CSV** uses AI to read the chart automatically. Drop image → Get CSV. Done in seconds.
-
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
-pip install chart2csv
-```
-
-```bash
-python -m chart2csv.cli.main your_chart.png
-```
-
-That's it. Check `your_chart.csv` for the extracted data.
-
----
-
-## 🌐 Try Online
-
-**[Open Live Demo →](https://kiku-jw.github.io/Chart2CSV/)**
-
-No installation needed. Works in your browser.
-
----
-
-## ✨ Features
-
-| | Feature | Description |
-|---|---|---|
-| ⚡ | **Zero-Click** | AI understands your chart automatically |
-| 🧠 | **Mistral Pixtral** | Powered by Mistral's vision LLM for 90%+ accuracy |
-| 🔒 | **Privacy** | Offline mode available with Tesseract |
-| 📊 | **Multi-Chart** | Line, scatter, bar charts supported |
-| ⚙️ | **CLI & API** | Batch process folders, REST API included |
-| ✓ | **Overlay** | Visual verification of detected points |
-
-> **Powered by [Mistral AI](https://mistral.ai)** — Using Pixtral Large for state-of-the-art chart understanding.
-
----
-
-## 📊 Comparison
-
-| | WebPlotDigitizer | PlotDigitizer Pro | **Chart2CSV** |
-|---|---|---|---|
-| **Method** | Manual clicking | Semi-auto | AI automatic |
-| **Speed** | 5-30 min | 2-10 min | **Seconds** |
-| **Price** | Free | Paid | **Free** |
-| **Offline** | ✓ | ✗ | ✓ |
-| **CLI/API** | ✗ | ✗ | ✓ |
-| **AI OCR** | ✗ | ✗ | ✓ |
-
----
-
-## 💻 Usage
-
-### Basic
-```bash
-python -m chart2csv.cli.main chart.png
-```
-
-### With AI (better accuracy)
-```bash
-export MISTRAL_API_KEY=your_key
-python -m chart2csv.cli.main chart.png --use-mistral
-```
-
-### Batch processing
-```bash
-python -m chart2csv.cli.main charts/ --batch --output-dir results/
-```
-
-### Visual verification
-```bash
-python -m chart2csv.cli.main chart.png --overlay check.png
+# API request
+curl -X POST "https://chart2csv.kikuai.dev/extract" \
+  -F "file=@chart.png"
 ```
 
 ---
 
-## 📖 Documentation
+## Project Structure
 
-- [Installation](https://github.com/kiku-jw/Chart2CSV/wiki/Installation)
-- [Quick Start](https://github.com/kiku-jw/Chart2CSV/wiki/Quick-Start)
-- [CLI Reference](https://github.com/kiku-jw/Chart2CSV/wiki/CLI-Reference)
-- [How It Works](https://github.com/kiku-jw/Chart2CSV/wiki/How-It-Works)
-- [FAQ](https://github.com/kiku-jw/Chart2CSV/wiki/FAQ)
-
----
-
-## 🛠️ Installation
-
-```bash
-pip install chart2csv
 ```
-
-For offline OCR:
-```bash
-# macOS
-brew install tesseract
-
-# Ubuntu
-apt-get install tesseract-ocr
+Chart2CSV/
+├── api/                    # FastAPI REST API
+│   └── main.py             # API endpoints
+├── chart2csv/              # Core Python package
+│   ├── core/               # Extraction logic
+│   │   ├── llm_extraction.py   # Mistral Pixtral LLM
+│   │   ├── pipeline.py         # CV pipeline (fallback)
+│   │   └── ocr.py              # OCR for axis labels
+│   └── cli/                # Command-line interface
+├── deploy/                 # Deployment scripts
+│   ├── deploy.sh           # Server deployment
+│   └── nginx.conf          # Nginx config
+├── scripts/                # Development utilities
+├── Dockerfile              # Container build
+├── docker-compose.yml      # Container orchestration
+├── requirements.txt        # Python dependencies
+└── setup.py                # Package installation
 ```
 
 ---
 
-## 📄 License
+## Features
 
-MIT License. Free for personal and commercial use.
+| Feature | Description |
+|---------|-------------|
+| 🧠 **Mistral Pixtral** | 90%+ accuracy with vision LLM |
+| ⚡ **Zero-Click** | Automatic chart understanding |
+| 📊 **Multi-Chart** | Line, scatter, bar charts |
+| 🔧 **Manual Mode** | Calibration endpoint for edge cases |
+| 🌐 **REST API** | Production-ready FastAPI |
+
+> **Powered by [Mistral AI](https://mistral.ai)**
 
 ---
 
-<div align="center">
+## API Endpoints
 
-**[⬆ Back to Top](#chart2csv)**
+| Endpoint | Description |
+|----------|-------------|
+| `POST /extract` | LLM extraction (default) |
+| `POST /extract/calibrated` | Manual calibration |
+| `GET /docs` | Swagger UI |
+| `GET /health` | Health check |
 
-Made with ❤️ by [kiku-jw](https://github.com/kiku-jw)
+---
 
-</div>
+## Installation
+
+```bash
+pip install -e .
+```
+
+---
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `MISTRAL_API_KEY` | Mistral AI API key (required) |
+
+---
+
+## License
+
+MIT
