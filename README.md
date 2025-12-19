@@ -8,7 +8,7 @@
 
 [Live Demo](https://kiku-jw.github.io/Chart2CSV/) · [API Docs](https://chart2csv.kikuai.dev/docs) · [Wiki](https://github.com/kiku-jw/Chart2CSV/wiki)
 
-[![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/license-AGPL--3.0-blue?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-3776ab?style=for-the-badge)](https://python.org)
 
 </div>
@@ -92,4 +92,4 @@ pip install -e .
 
 ## License
 
-MIT
+AGPL-3.0. Copyright (c) 2025 KikuAI Lab
