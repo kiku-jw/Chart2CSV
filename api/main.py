@@ -9,6 +9,7 @@ import io
 import time
 import base64
 import hashlib
+import logging
 from typing import Optional
 from contextlib import asynccontextmanager
 
@@ -24,12 +25,17 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 
 # Import chart2csv core
-import sys
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from chart2csv.core.pipeline import extract_chart
 from chart2csv.core.types import ChartType, Scale
 from chart2csv.core.llm_extraction import extract_chart_llm, llm_result_to_csv
+
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 
 # --- Models ---
@@ -90,9 +96,12 @@ start_time = time.time()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan handler."""
-    print("Chart2CSV API starting...")
+    logger.info("Chart2CSV API starting", extra={
+        "version": "1.0.0",
+        "environment": os.environ.get("ENV", "production")
+    })
     yield
-    print("Chart2CSV API shutting down...")
+    logger.info("Chart2CSV API shutting down")
 
 
 app = FastAPI(
@@ -104,13 +113,22 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# CORS
+# CORS - Configure allowed origins from environment
+ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "").split(",")
+if not ALLOWED_ORIGINS or ALLOWED_ORIGINS == [""]:
+    # Default allowed origins for production
+    ALLOWED_ORIGINS = [
+        "https://kiku-jw.github.io",
+        "https://chart2csv.kikuai.dev",
+        "http://localhost:3000",  # Development frontend
+    ]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "X-Forwarded-For"],
 )
 
 
@@ -124,12 +142,33 @@ def get_client_ip(x_forwarded_for: Optional[str] = Header(None)) -> str:
 
 
 def image_to_temp_path(image_bytes: bytes) -> str:
-    """Save image bytes to temp file and return path."""
+    """
+    Save image bytes to temp file with security validation.
+
+    Raises:
+        ValueError: If image format is invalid or dimensions too large
+    """
     import tempfile
-    
-    # Detect format
+
+    # Security: Set maximum image size to prevent decompression bombs
+    MAX_IMAGE_PIXELS = 89478485  # PIL default (about 8192x10922)
+    Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
+
+    # Detect format and validate
     img = Image.open(io.BytesIO(image_bytes))
-    
+
+    # Security: Validate image format
+    if img.format not in ['PNG', 'JPEG', 'WEBP']:
+        raise ValueError(f"Unsupported image format: {img.format}. Only PNG, JPEG, and WEBP are allowed.")
+
+    # Security: Check image dimensions to prevent decompression bombs
+    if img.width * img.height > MAX_IMAGE_PIXELS:
+        raise ValueError(f"Image too large: {img.width}x{img.height} pixels. Maximum is {MAX_IMAGE_PIXELS} pixels.")
+
+    # Additional size check for reasonable chart dimensions
+    if img.width > 10000 or img.height > 10000:
+        raise ValueError(f"Image dimensions too large: {img.width}x{img.height}. Maximum is 10000x10000.")
+
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as f:
         img.save(f, format="PNG")
         return f.name

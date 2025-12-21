@@ -10,6 +10,16 @@ from typing import List, Tuple, Optional, Dict, Any
 import numpy as np
 
 
+# Confidence weights for overall score calculation
+# These weights reflect the relative importance of each component
+CONFIDENCE_WEIGHTS = {
+    'crop': 0.3,       # Crop quality is critical - affects all downstream processing
+    'axis': 0.25,      # Axis detection enables coordinate transformation
+    'ocr': 0.3,        # OCR accuracy determines scale precision
+    'extraction': 0.15  # Extraction confidence is relative to prior steps
+}
+
+
 class ChartType(Enum):
     """Supported chart types."""
     SCATTER = "scatter"
@@ -74,6 +84,8 @@ class Confidence:
         """
         Calculate overall confidence as weighted average.
 
+        Uses CONFIDENCE_WEIGHTS constants for reproducibility.
+
         Formula:
             confidence = (
                 0.3 × crop +
@@ -83,10 +95,10 @@ class Confidence:
             )
         """
         return (
-            0.3 * self.crop +
-            0.25 * self.axis +
-            0.3 * self.ocr +
-            0.15 * self.extraction
+            CONFIDENCE_WEIGHTS['crop'] * self.crop +
+            CONFIDENCE_WEIGHTS['axis'] * self.axis +
+            CONFIDENCE_WEIGHTS['ocr'] * self.ocr +
+            CONFIDENCE_WEIGHTS['extraction'] * self.extraction
         )
 
     def zone(self) -> str:
