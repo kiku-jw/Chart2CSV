@@ -41,6 +41,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Prometheus metrics
+from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
+from starlette.responses import Response
+
+REQUESTS_TOTAL = Counter('chart2csv_requests_total', 'Total requests', ['endpoint', 'status'])
+REQUEST_LATENCY = Histogram('chart2csv_request_latency_seconds', 'Request latency', ['endpoint'])
+EXTRACTIONS_TOTAL = Counter('chart2csv_extractions_total', 'Total extractions', ['mode', 'chart_type'])
+ACTIVE_REQUESTS = Gauge('chart2csv_active_requests', 'Active requests')
+
 
 # --- Models ---
 
@@ -373,6 +382,12 @@ async def health():
         version="1.0.0",
         uptime_seconds=round(time.time() - start_time, 2)
     )
+
+
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint."""
+    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
 @v1_router.post("/extract", response_model=ExtractionResult)
