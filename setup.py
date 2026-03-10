@@ -28,7 +28,7 @@ setup(
     description="Extract data from chart images to CSV/JSON with honest confidence scoring",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/KikuAI-Lab/Chart2CSV",
+    url="https://github.com/kiku-jw/Chart2CSV",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",

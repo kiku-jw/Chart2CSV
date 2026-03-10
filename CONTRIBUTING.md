@@ -45,7 +45,7 @@ This project follows a standard open-source code of conduct:
    ```
 3. Add upstream remote:
    ```bash
-   git remote add upstream https://github.com/KikuAI-Lab/Chart2CSV.git
+   git remote add upstream https://github.com/kiku-jw/Chart2CSV.git
    ```
 
 ---
@@ -342,7 +342,7 @@ None
 
 ### Before Reporting
 
-1. Check if the bug is already reported in [Issues](https://github.com/KikuAI-Lab/Chart2CSV/issues)
+1. Check if the bug is already reported in [Issues](https://github.com/kiku-jw/Chart2CSV/issues)
 2. Test with the latest `main` branch
 3. Gather reproduction steps
 
@@ -480,9 +480,9 @@ Overall confidence is a weighted average.
 
 ## Getting Help
 
-- **Documentation:** Check the [Wiki](https://github.com/KikuAI-Lab/Chart2CSV/wiki)
-- **Issues:** Search [existing issues](https://github.com/KikuAI-Lab/Chart2CSV/issues)
-- **Discussions:** Use [GitHub Discussions](https://github.com/KikuAI-Lab/Chart2CSV/discussions) for questions
+- **Documentation:** Check the [Wiki](https://github.com/kiku-jw/Chart2CSV/wiki)
+- **Issues:** Search [existing issues](https://github.com/kiku-jw/Chart2CSV/issues)
+- **Discussions:** Use [GitHub Discussions](https://github.com/kiku-jw/Chart2CSV/discussions) for questions
 
 ---
 

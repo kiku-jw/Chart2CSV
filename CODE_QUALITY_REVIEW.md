@@ -299,7 +299,7 @@ url="https://github.com/yourusername/chart2csv",
 ```python
 author="KikuAI",
 author_email="contact@kikuai.dev",
-url="https://github.com/KikuAI-Lab/Chart2CSV",
+url="https://github.com/kiku-jw/Chart2CSV",
 ```
 
 ---
