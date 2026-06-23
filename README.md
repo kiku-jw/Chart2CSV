@@ -2,11 +2,19 @@
 
 # Chart2CSV
 
-### Chart Image to CSV Extraction
+Chart2CSV turns chart images into CSV-style data for analysts and operators who need a quick extraction path from visual reports.
 
-**Extract CSV-style data from chart images using a vision model and fallback parsing pipeline.**
+**[Try the live demo](https://kiku-jw.github.io/Chart2CSV/)**
 
-[Live Demo](https://kiku-jw.github.io/Chart2CSV/) · [Wiki](https://github.com/kiku-jw/Chart2CSV/wiki)
+[Docs](https://github.com/kiku-jw/Chart2CSV/wiki) · [Examples](#quick-start) · [API request](#quick-start)
+
+Sample output:
+
+```csv
+label,value
+Q1,42
+Q2,57
+```
 
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-3776ab?style=for-the-badge)](https://python.org)
