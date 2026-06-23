@@ -2,11 +2,11 @@
 
 # Chart2CSV
 
-### AI-Powered Chart Data Extraction
+### Chart Image to CSV Extraction
 
-**Extract data from chart images using Mistral Pixtral Vision. 90%+ accuracy.**
+**Extract CSV-style data from chart images using a vision model and fallback parsing pipeline.**
 
-[Live Demo](https://kiku-jw.github.io/Chart2CSV/) · [API Docs](https://chart2csv.kikuai.dev/docs) · [Wiki](https://github.com/kiku-jw/Chart2CSV/wiki)
+[Live Demo](https://kiku-jw.github.io/Chart2CSV/) · [Wiki](https://github.com/kiku-jw/Chart2CSV/wiki)
 
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-3776ab?style=for-the-badge)](https://python.org)
@@ -53,11 +53,11 @@ Chart2CSV/
 
 | Feature | Description |
 |---------|-------------|
-| 🧠 **Mistral Pixtral** | 90%+ accuracy with vision LLM |
+| 🧠 **Mistral Pixtral** | Vision-model extraction path |
 | ⚡ **Zero-Click** | Automatic chart understanding |
 | 📊 **Multi-Chart** | Line, scatter, bar charts |
 | 🔧 **Manual Mode** | Calibration endpoint for edge cases |
-| 🌐 **REST API** | Production-ready FastAPI |
+| 🌐 **REST API** | FastAPI endpoints for extraction workflows |
 
 > **Powered by [Mistral AI](https://mistral.ai)**
 
