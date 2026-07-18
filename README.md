@@ -4,9 +4,9 @@
 
 Chart2CSV turns chart images into CSV-style data for analysts and operators who need a quick extraction path from visual reports.
 
-**[Try the live demo](https://kiku-jw.github.io/Chart2CSV/)**
+**[Try the live demo](https://kikuai-lab.github.io/Chart2CSV/)**
 
-[Docs](https://github.com/kiku-jw/Chart2CSV/wiki) · [Examples](#quick-start) · [API request](#quick-start)
+[Docs](https://github.com/KikuAI-Lab/Chart2CSV/wiki) · [Examples](#quick-start) · [API request](#quick-start)
 
 Sample output:
 

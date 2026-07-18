@@ -27,10 +27,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/kiku-jw/Chart2CSV"
-Documentation = "https://github.com/kiku-jw/Chart2CSV/wiki"
-Repository = "https://github.com/kiku-jw/Chart2CSV"
-Issues = "https://github.com/kiku-jw/Chart2CSV/issues"
+Homepage = "https://github.com/KikuAI-Lab/Chart2CSV"
+Documentation = "https://github.com/KikuAI-Lab/Chart2CSV/wiki"
+Repository = "https://github.com/KikuAI-Lab/Chart2CSV"
+Issues = "https://github.com/KikuAI-Lab/Chart2CSV/issues"
 
 [project.scripts]
 chart2csv = "chart2csv.cli.main:main"

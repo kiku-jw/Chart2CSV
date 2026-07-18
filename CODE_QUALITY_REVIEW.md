@@ -120,7 +120,7 @@ app.add_middleware(
 ALLOWED_ORIGINS = os.environ.get("ALLOWED_ORIGINS", "").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS or ["https://kiku-jw.github.io"],
+    allow_origins=ALLOWED_ORIGINS or ["https://kikuai-lab.github.io"],
     allow_credentials=True,
     allow_methods=["POST", "GET"],
     allow_headers=["Content-Type", "Authorization"],
@@ -299,7 +299,7 @@ url="https://github.com/yourusername/chart2csv",
 ```python
 author="KikuAI",
 author_email="contact@kikuai.dev",
-url="https://github.com/kiku-jw/Chart2CSV",
+url="https://github.com/KikuAI-Lab/Chart2CSV",
 ```
 
 ---
