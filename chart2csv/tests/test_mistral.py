@@ -49,10 +49,10 @@ class TestMistralOCR(unittest.TestCase):
         # Setup mock backend
         backend_instance = MockBackend.return_value
         backend_instance.is_available.return_value = True
-        backend_instance.process_axis_strip.side_effect = [
-            [10, 20, 30], # X axis
-            [5, 10]       # Y axis
-        ]
+        backend_instance.process_both_axes.return_value = (
+            [10, 20, 30],  # X axis
+            [5, 10],       # Y axis
+        )
 
         # Setup detect ticks
         mock_detect.return_value = (
@@ -67,7 +67,7 @@ class TestMistralOCR(unittest.TestCase):
         ticks_data, conf = extract_tick_labels(img, axes, use_mistral=True)
 
         # Verify calls
-        self.assertTrue(backend_instance.process_axis_strip.called)
+        backend_instance.process_both_axes.assert_called_once()
 
         # Verify results
         self.assertEqual(len(ticks_data["x"]), 3)
