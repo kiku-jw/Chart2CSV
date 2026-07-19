@@ -2,7 +2,7 @@
 opencv-python>=4.8.0
 pytesseract>=0.3.10
 Pillow>=10.0.0
-numpy>=1.24.0
+numpy>=2.2.6
 scipy>=1.11.0
 scikit-image>=0.21.0
 
