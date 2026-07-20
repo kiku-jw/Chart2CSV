@@ -22,7 +22,9 @@ updates:
       day: monday
       time: "05:00"
       timezone: Europe/Kyiv
-    open-pull-requests-limit: 5
+    # These manifests only declare lower bounds, so version-update PRs merely
+    # raise compatibility floors. Security update PRs remain enabled.
+    open-pull-requests-limit: 0
     groups:
       compatible-updates:
         patterns:
@@ -30,7 +32,6 @@ updates:
         update-types:
           - minor
           - patch
-
   - package-ecosystem: pip
     directory: /api
     schedule:
@@ -38,7 +39,9 @@ updates:
       day: monday
       time: "05:00"
       timezone: Europe/Kyiv
-    open-pull-requests-limit: 5
+    # These manifests only declare lower bounds, so version-update PRs merely
+    # raise compatibility floors. Security update PRs remain enabled.
+    open-pull-requests-limit: 0
     groups:
       compatible-updates:
         patterns:
@@ -54,7 +57,9 @@ updates:
       day: monday
       time: "05:00"
       timezone: Europe/Kyiv
-    open-pull-requests-limit: 5
+    # Keep the container on the repository's declared Python support line.
+    # Security update PRs remain enabled.
+    open-pull-requests-limit: 0
     groups:
       compatible-updates:
         patterns:
