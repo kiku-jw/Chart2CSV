@@ -4,11 +4,13 @@
 
 Chart2CSV turns chart images into CSV-style data for analysts and operators who need a quick extraction path from visual reports.
 
+**Status: Alpha. Verify extracted values against the source chart before using them.**
+
 **[Try the live demo](https://kikuai-lab.github.io/Chart2CSV/)**
 
-[Docs](https://github.com/KikuAI-Lab/Chart2CSV/wiki) · [Examples](#quick-start) · [API request](#quick-start)
+[Docs](https://github.com/KikuAI-Lab/Chart2CSV/wiki) · [Quick start](#quick-start) · [API request](#quick-start)
 
-Sample output:
+Illustrative CSV format (not measured output):
 
 ```csv
 label,value
@@ -26,8 +28,11 @@ Q2,57
 ## Quick Start
 
 ```bash
-# API request
-curl -X POST "https://chart2csv.kikuai.dev/extract" \
+# In one terminal, set MISTRAL_API_KEY in the environment and start the local API:
+python -m uvicorn api.main:app --reload
+
+# In another terminal:
+curl -X POST "http://127.0.0.1:8000/v1/extract" \
   -F "file=@chart.png"
 ```
 
@@ -41,7 +46,7 @@ Chart2CSV/
 │   └── main.py             # API endpoints
 ├── chart2csv/              # Core Python package
 │   ├── core/               # Extraction logic
-│   │   ├── llm_extraction.py   # Mistral Pixtral LLM
+│   │   ├── llm_extraction.py   # Mistral-backed extraction
 │   │   ├── pipeline.py         # CV pipeline (fallback)
 │   │   └── ocr.py              # OCR for axis labels
 │   └── cli/                # Command-line interface
@@ -61,8 +66,8 @@ Chart2CSV/
 
 | Feature | Description |
 |---------|-------------|
-| 🧠 **Mistral Pixtral** | Vision-model extraction path |
-| ⚡ **Zero-Click** | Automatic chart understanding |
+| 🧠 **Mistral extraction** | Vision-model extraction path |
+| ⚡ **Automatic extraction** | Reads supported charts without manual point selection |
 | 📊 **Multi-Chart** | Line, scatter, bar charts |
 | 🔧 **Manual Mode** | Calibration endpoint for edge cases |
 | 🌐 **REST API** | FastAPI endpoints for extraction workflows |
@@ -75,10 +80,18 @@ Chart2CSV/
 
 | Endpoint | Description |
 |----------|-------------|
-| `POST /extract` | LLM extraction (default) |
-| `POST /extract/calibrated` | Manual calibration |
+| `POST /v1/extract` | LLM extraction (default) |
+| `POST /v1/extract/calibrated` | Manual calibration |
 | `GET /docs` | Swagger UI |
 | `GET /health` | Health check |
+
+---
+
+## Data Handling
+
+The browser demo sends the selected chart image and user-provided API key directly to Mistral. It stores the API key in that browser's `localStorage` until the field or site data is cleared.
+
+The local API uses `MISTRAL_API_KEY` for its default LLM-backed extraction path. The CLI uses the local CV/Tesseract path unless `--use-mistral` is supplied. Mistral-backed modes transmit image data to Mistral.
 
 ---
 
@@ -94,7 +107,7 @@ pip install -e .
 
 | Variable | Description |
 |----------|-------------|
-| `MISTRAL_API_KEY` | Mistral AI API key (required) |
+| `MISTRAL_API_KEY` | Mistral AI API key (required for Mistral-backed extraction) |
 
 ---
 

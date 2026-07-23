@@ -4,15 +4,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chart2CSV — Extract Data from Chart Images with AI</title>
+  <title>Chart2CSV — Extract Supported Chart Images to CSV</title>
   <meta name="description"
-    content="Convert chart images to CSV data instantly. No clicking required. Free, open-source chart digitizer powered by AI.">
-  <meta name="keywords"
-    content="chart digitizer, extract data from graph, plot to csv, chart to data, webplotdigitizer alternative">
-  <meta property="og:title" content="Chart2CSV — AI Chart Data Extraction">
-  <meta property="og:description" content="Extract data from chart images to CSV. Zero-click. Free. Open-source.">
+    content="Alpha browser demo for extracting CSV data from supported line, bar, and scatter chart images with Mistral.">
+  <meta property="og:title" content="Chart2CSV — Supported Chart Images to CSV">
+  <meta property="og:description"
+    content="Alpha browser demo for line, bar, and scatter chart extraction with Mistral.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://kiku-jw.github.io/Chart2CSV/">
+  <meta property="og:url" content="https://kikuai-lab.github.io/Chart2CSV/">
+  <link rel="canonical" href="https://kikuai-lab.github.io/Chart2CSV/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
@@ -798,7 +798,6 @@
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
         <li><a href="#how-it-works">How it Works</a></li>
-        <li><a href="#comparison">Comparison</a></li>
         <li><a href="#demo">Try It</a></li>
       </ul>
       <a href="https://github.com/KikuAI-Lab/Chart2CSV" class="nav-cta">GitHub</a>
@@ -808,15 +807,15 @@
   <section class="hero">
     <div class="hero-badge">
       <span class="dot"></span>
-      <span>Powered by Mistral Pixtral Vision</span>
+      <span>Alpha · Mistral vision extraction</span>
     </div>
     <h1>
-      <span class="gradient">Zero-Click</span><br>
-      Chart to CSV
+      <span class="gradient">Chart Images</span><br>
+      to CSV
     </h1>
     <p class="hero-subtitle">
-      Extract data from any chart image with 90%+ accuracy. Powered by Mistral Pixtral Large vision model.
-      AI reads the axes, values, and data points automatically.
+      Upload a line, bar, or scatter chart with clear X/Y axes. The Alpha browser demo sends the image to
+      Mistral and returns CSV text for you to verify.
     </p>
     <div class="hero-buttons">
       <a href="#demo" class="btn btn-primary">Try It Now →</a>
@@ -827,25 +826,26 @@
   <section id="features" class="features">
     <div class="container">
       <div class="section-header">
-        <h2>Why Chart2CSV?</h2>
-        <p>The fastest way to get data from chart images</p>
+        <h2>Current Capabilities</h2>
+        <p>An Alpha extraction workflow for supported chart types</p>
       </div>
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">⚡</div>
-          <h3>Zero-Click Extraction</h3>
-          <p>AI understands your chart automatically. No need to manually click each data point like traditional tools.
-          </p>
+          <h3>Automatic Extraction</h3>
+          <p>The extraction path attempts to read chart axes, labels, and visible data points without manual point
+            selection.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🧠</div>
-          <h3>Mistral Pixtral</h3>
-          <p>Powered by Mistral AI's Pixtral Large vision model with 90%+ accuracy on chart extraction.</p>
+          <h3>Mistral Vision</h3>
+          <p>The browser demo uses the Mistral API to interpret the selected chart image.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">🔒</div>
-          <h3>Privacy First</h3>
-          <p>Run offline with Tesseract OCR. Your data never leaves your computer unless you choose cloud mode.</p>
+          <h3>Clear Data Handling</h3>
+          <p>The browser demo sends the selected image directly to Mistral. The Python CLI also includes a local
+            CV/Tesseract path.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">📊</div>
@@ -855,12 +855,12 @@
         <div class="feature-card">
           <div class="feature-icon">⚙️</div>
           <h3>CLI & API</h3>
-          <p>Powerful command-line interface for automation. Process folders of charts with a single command.</p>
+          <p>Use the command-line interface for individual images or batch-process a folder of charts.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">✓</div>
           <h3>Visual Verification</h3>
-          <p>Generate overlay images showing detected points. Verify extraction quality at a glance.</p>
+          <p>Generate overlay images and compare detected points with the source chart.</p>
         </div>
       </div>
     </div>
@@ -886,72 +886,9 @@
         <div class="step">
           <div class="step-number">3</div>
           <h3>Download CSV</h3>
-          <p>Get your data as a clean CSV file</p>
+          <p>Review and download the returned CSV text</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section id="comparison" class="comparison">
-    <div class="container">
-      <div class="section-header">
-        <h2>Comparison</h2>
-        <p>How we stack up against alternatives</p>
-      </div>
-      <table class="comparison-table">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            <th>WebPlotDigitizer</th>
-            <th>PlotDigitizer Pro</th>
-            <th>Chart2CSV</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Extraction Method</td>
-            <td>Manual point clicking</td>
-            <td>Semi-automatic</td>
-            <td><strong>AI automatic</strong></td>
-          </tr>
-          <tr>
-            <td>Speed</td>
-            <td>5-30 min / chart</td>
-            <td>2-10 min / chart</td>
-            <td><strong>Seconds</strong></td>
-          </tr>
-          <tr>
-            <td>Price</td>
-            <td>Free</td>
-            <td>$$ / month</td>
-            <td><strong>Free & Open Source</strong></td>
-          </tr>
-          <tr>
-            <td>Offline Mode</td>
-            <td class="check">✓</td>
-            <td class="cross">✗</td>
-            <td class="check"><strong>✓</strong></td>
-          </tr>
-          <tr>
-            <td>CLI / API</td>
-            <td class="cross">✗</td>
-            <td class="cross">✗</td>
-            <td class="check"><strong>✓</strong></td>
-          </tr>
-          <tr>
-            <td>AI OCR</td>
-            <td class="cross">✗</td>
-            <td class="cross">✗</td>
-            <td class="check"><strong>✓ (Mistral)</strong></td>
-          </tr>
-          <tr class="highlight">
-            <td>Best For</td>
-            <td>Occasional use</td>
-            <td>Business users</td>
-            <td><strong>Developers & Researchers</strong></td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </section>
 
@@ -959,28 +896,28 @@
     <div class="container">
       <div class="section-header">
         <h2>Try It Now</h2>
-        <p>Extract data from your chart in seconds</p>
+        <p>Test the Alpha demo with your own chart or a sample chart</p>
       </div>
 
       <!-- Supported Charts Examples -->
       <div class="examples-section">
-        <h3 style="text-align: center; margin-bottom: 24px; color: var(--text-secondary);">📊 Real-World Examples —
+        <h3 style="text-align: center; margin-bottom: 24px; color: var(--text-secondary);">📊 Sample Charts —
           Click to Download & Test</h3>
         <div class="examples-grid">
-          <a href="example_line.png" download="tesla_stock_2024.png" class="example-card">
-            <img src="example_line.png" alt="Stock price chart">
-            <span>📈 Stock Prices</span>
-            <div class="download-hint">Extract TSLA price history</div>
+          <a href="example_line.png" download="sample_line_chart.png" class="example-card">
+            <img src="example_line.png" alt="Sample stock-price line chart">
+            <span>📈 Sample Line Chart</span>
+            <div class="download-hint">Download the sample chart</div>
           </a>
-          <a href="example_bar.png" download="quarterly_sales.png" class="example-card">
-            <img src="example_bar.png" alt="Sales bar chart">
-            <span>💰 Sales Data</span>
-            <div class="download-hint">Extract Q1-Q4 revenue</div>
+          <a href="example_bar.png" download="sample_bar_chart.png" class="example-card">
+            <img src="example_bar.png" alt="Sample quarterly-sales bar chart">
+            <span>💰 Sample Bar Chart</span>
+            <div class="download-hint">Download the sample chart</div>
           </a>
-          <a href="example_scatter.png" download="research_data.png" class="example-card">
-            <img src="example_scatter.png" alt="Research scatter plot">
-            <span>🔬 Research Data</span>
-            <div class="download-hint">Extract experiment results</div>
+          <a href="example_scatter.png" download="sample_scatter_chart.png" class="example-card">
+            <img src="example_scatter.png" alt="Sample research scatter plot">
+            <span>🔬 Sample Scatter Plot</span>
+            <div class="download-hint">Download the sample chart</div>
           </a>
         </div>
 
@@ -998,7 +935,12 @@
         <div class="api-key-box">
           <label for="apiKey">🔑 Mistral API Key</label>
           <input type="password" id="apiKey" placeholder="Enter your API key...">
-          <small>Get a free key at <a href="https://console.mistral.ai/" target="_blank">console.mistral.ai</a></small>
+          <small>
+            Get an API key at <a href="https://console.mistral.ai/" target="_blank"
+              rel="noopener noreferrer">console.mistral.ai</a>. When you select Extract Data, this page sends the
+            selected chart image and key directly to Mistral. The key is stored in this browser's localStorage until
+            you clear the field or site data.
+          </small>
         </div>
 
         <div class="dropzone" id="dropzone">
@@ -1040,7 +982,8 @@
         <a href="https://github.com/KikuAI-Lab/Chart2CSV/issues">Report Issue</a>
       </div>
       <p>Powered by <a href="https://mistral.ai">Mistral AI</a> • Built by <a
-          href="https://github.com/kiku-jw">kiku-jw</a> • MIT License</p>
+          href="https://github.com/kiku-jw">kiku-jw</a> • <a
+          href="https://github.com/KikuAI-Lab/Chart2CSV/blob/master/LICENSE">AGPL-3.0</a></p>
     </div>
   </footer>
 
